@@ -119,7 +119,6 @@
 			isa = PBXGroup;
 			children = (
 				OBJ_18 /* InstructionParser.swift */,
-				OBJ_19 /* SourceCodeLine.swift */,
 				OBJ_15 /* Commands */,
 			);
 			path = Parsing;
@@ -139,6 +138,7 @@
 			children = (
 				5518FA4C20C073B0001F4D72 /* SourceCodeExtractor.swift */,
 				OBJ_21 /* CommentsAndWhitespaceStripper.swift */,
+				OBJ_19 /* SourceCodeLine.swift */,
 			);
 			path = Preprocessing;
 			sourceTree = "<group>";
