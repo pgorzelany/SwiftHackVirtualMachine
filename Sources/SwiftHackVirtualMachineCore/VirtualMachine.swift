@@ -13,14 +13,16 @@ public class VirtualMachine {
 
     private let sourceCodeExtractor = SourceCodeExtractor()
     private let stripper = CommentAndWhitespaceStripper()
+    private let parser = InstructionParser()
+    private let codeGenerator = CodeGenerator()
 
     /// Compiles .vm source files into a single .asm file in the current directory
     public func run() throws {
         let currentDirectoryUrl = URL(string: FileManager.default.currentDirectoryPath)!
         let sourceCodeLines = try sourceCodeExtractor.getSourceCodeLines(at: currentDirectoryUrl)
         let strippedSourceCodeLines = stripper.strip(lines: sourceCodeLines)
-        for line in strippedSourceCodeLines {
-            print(line)
-        }
+        let commands = try parser.parse(source: strippedSourceCodeLines)
+        try codeGenerator.createAssemblyFile(for: commands)
+        print("Created asm file")
     }
 }

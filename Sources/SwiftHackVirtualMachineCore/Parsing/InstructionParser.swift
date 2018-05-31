@@ -10,6 +10,6 @@ import Foundation
 class InstructionParser {
 
     func parse(source: [SourceCodeLine]) throws -> [Command] {
-        fatalError()
+        return []
     }
 }
