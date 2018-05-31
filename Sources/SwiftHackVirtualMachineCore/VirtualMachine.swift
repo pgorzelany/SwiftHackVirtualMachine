@@ -13,7 +13,7 @@ public class VirtualMachine {
 
     /// Compiles .vm source files into a single .asm file in the current directory
     public func run() throws {
-        print(CommandLine.arguments[0])
+        print(Process().currentDirectoryPath)
     }
 
     /// Compiles the given *.vm file at the source url and outputs assembly to destination url
