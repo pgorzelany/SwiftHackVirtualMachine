@@ -10,5 +10,5 @@ import Foundation
 struct SourceCodeLine {
     let lineNumber: Int
     let sourceFileName: String
-    let contents: String
+    var contents: String
 }

@@ -6,3 +6,12 @@
 //
 
 import Foundation
+
+class CodeGenerator {
+
+    let fileWriter = FileWriter()
+
+    func generateAssembly(for commands: [Command]) -> [String] {
+        fatalError()
+    }
+}

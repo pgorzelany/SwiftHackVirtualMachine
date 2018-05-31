@@ -15,29 +15,32 @@ public class CommentAndWhitespaceStripper {
     public init() {}
 
     /// Strips the provided strings from comments and whitespace
-    public func strip(lines: [String]) -> [String] {
+    func strip(lines: [SourceCodeLine]) -> [SourceCodeLine] {
         let results = stripWhitespace(from: lines)
         return stripComments(from: results)
     }
 
-    private func stripWhitespace(from lines: [String]) -> [String] {
-        return lines.compactMap { (line) -> String? in
-            let result = line.components(separatedBy: .whitespacesAndNewlines).joined()
-            guard !result.isEmpty else {
+    private func stripWhitespace(from lines: [SourceCodeLine]) -> [SourceCodeLine] {
+        return lines.compactMap { (line) -> SourceCodeLine? in
+            var lineCopy = line
+            lineCopy.contents = lineCopy.contents.components(separatedBy: .whitespacesAndNewlines).joined(separator: " ")
+            guard !lineCopy.contents.isEmpty else {
                 return nil
             }
 
-            return result
+            return lineCopy
         }
     }
 
-    private func stripComments(from lines: [String]) -> [String] {
-        return lines.compactMap({ (line) -> String? in
-            guard let result = line.components(separatedBy: commentCharacter).first, !result.isEmpty else {
+    private func stripComments(from lines: [SourceCodeLine]) -> [SourceCodeLine] {
+        return lines.compactMap({ (line) -> SourceCodeLine? in
+            var lineCopy = line
+            guard let codeContent = lineCopy.contents.components(separatedBy: commentCharacter).first, !codeContent.isEmpty else {
                 return nil
             }
-
-            return result
+            
+            lineCopy.contents = codeContent
+            return lineCopy
         })
     }
 }
