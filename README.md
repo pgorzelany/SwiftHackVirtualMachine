@@ -1,3 +1,3 @@
 # SwiftHackVirtualMachine
 
-A description of this package.
+The Hack Virtual Machine implementation in the Swift programming language.
