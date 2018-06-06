@@ -22,6 +22,74 @@ class CodeGenerator {
 
     func generateAssembly(for command: Command) throws -> String {
         #warning("implement this")
-        return "wow"
+
+        switch command {
+        case .push(let segment, let index):
+            return generateAssemblyForPushCommand(segment: segment, index: index)
+        case .pop(let segment, let index):
+            return generateAssemblyForPopCommand(segment: segment, index: index)
+        case .neg:
+            return generateAssemblyForNegCommand()
+        case .add:
+            return generateAssemblyForAddCommand()
+        case .sub:
+            return generateAssemblyForSubCommand()
+        case .eq:
+            return generateAssemblyForEqCommand()
+        case .qt:
+            return generateAssemblyForGtCommand()
+        case .lt:
+            return generateAssemblyForLtCommand()
+        case .and:
+            return generateAssemblyForAndCommand()
+        case .or:
+            return generateAssemblyForOrCommand()
+        case .not:
+            return generateAssemblyForNotCommand()
+        }
+    }
+
+    private func generateAssemblyForPushCommand(segment: MemorySegment, index: Int16) -> String {
+        fatalError()
+    }
+
+    private func generateAssemblyForPopCommand(segment: MemorySegment, index: Int16) -> String {
+        fatalError()
+    }
+
+    private func generateAssemblyForNegCommand() -> String {
+        fatalError()
+    }
+
+    private func generateAssemblyForAddCommand() -> String {
+        fatalError()
+    }
+
+    private func generateAssemblyForSubCommand() -> String {
+        fatalError()
+    }
+
+    private func generateAssemblyForEqCommand() -> String {
+        fatalError()
+    }
+
+    private func generateAssemblyForLtCommand() -> String {
+        fatalError()
+    }
+
+    private func generateAssemblyForGtCommand() -> String {
+        fatalError()
+    }
+
+    private func generateAssemblyForAndCommand() -> String {
+        fatalError()
+    }
+
+    private func generateAssemblyForOrCommand() -> String {
+        fatalError()
+    }
+
+    private func generateAssemblyForNotCommand() -> String {
+        fatalError()
     }
 }
