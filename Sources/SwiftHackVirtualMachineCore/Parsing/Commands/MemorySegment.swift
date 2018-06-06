@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum MemorySegment {
+public enum MemorySegment: String {
     case argument
     case local
     case `static`

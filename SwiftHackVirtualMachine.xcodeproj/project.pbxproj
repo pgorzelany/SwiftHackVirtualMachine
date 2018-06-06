@@ -22,6 +22,7 @@
 
 /* Begin PBXBuildFile section */
 		5518FA4D20C073B0001F4D72 /* SourceCodeExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5518FA4C20C073B0001F4D72 /* SourceCodeExtractor.swift */; };
+		C9223F1220C82DF30029E9F2 /* VirtualMachineError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9223F1120C82DF30029E9F2 /* VirtualMachineError.swift */; };
 		OBJ_35 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* main.swift */; };
 		OBJ_37 /* SwiftHackVirtualMachineCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "SwiftHackVirtualMachine::SwiftHackVirtualMachineCore::Product" /* SwiftHackVirtualMachineCore.framework */; };
 		OBJ_44 /* CodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* CodeGenerator.swift */; };
@@ -54,6 +55,7 @@
 
 /* Begin PBXFileReference section */
 		5518FA4C20C073B0001F4D72 /* SourceCodeExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceCodeExtractor.swift; sourceTree = "<group>"; };
+		C9223F1120C82DF30029E9F2 /* VirtualMachineError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualMachineError.swift; sourceTree = "<group>"; };
 		OBJ_12 /* CodeGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeGenerator.swift; sourceTree = "<group>"; };
 		OBJ_16 /* Command.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Command.swift; sourceTree = "<group>"; };
 		OBJ_17 /* MemorySegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemorySegment.swift; sourceTree = "<group>"; };
@@ -99,6 +101,7 @@
 			isa = PBXGroup;
 			children = (
 				OBJ_22 /* VirtualMachine.swift */,
+				C9223F1120C82DF30029E9F2 /* VirtualMachineError.swift */,
 				OBJ_20 /* Preprocessing */,
 				OBJ_14 /* Parsing */,
 				OBJ_11 /* CodeGeneration */,
@@ -170,7 +173,7 @@
 			name = Products;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		OBJ_5 /*  */ = {
+		OBJ_5 = {
 			isa = PBXGroup;
 			children = (
 				OBJ_6 /* Package.swift */,
@@ -178,7 +181,6 @@
 				OBJ_23 /* Tests */,
 				OBJ_26 /* Products */,
 			);
-			name = "";
 			sourceTree = "<group>";
 		};
 		OBJ_7 /* Sources */ = {
@@ -280,7 +282,7 @@
 			knownRegions = (
 				en,
 			);
-			mainGroup = OBJ_5 /*  */;
+			mainGroup = OBJ_5;
 			productRefGroup = OBJ_26 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -314,6 +316,7 @@
 				OBJ_48 /* InstructionParser.swift in Sources */,
 				OBJ_49 /* SourceCodeLine.swift in Sources */,
 				OBJ_50 /* CommentsAndWhitespaceStripper.swift in Sources */,
+				C9223F1220C82DF30029E9F2 /* VirtualMachineError.swift in Sources */,
 				OBJ_51 /* VirtualMachine.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
