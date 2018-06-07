@@ -58,38 +58,146 @@ class CodeGenerator {
     }
 
     private func generateAssemblyForNegCommand() -> String {
-        fatalError()
+        return """
+        // VM - NEG
+        @SP // points to the stack pointer
+        A=M-1 // point to last stack memory location
+        M=-M // negate the top stack value
+        """
     }
 
     private func generateAssemblyForAddCommand() -> String {
-        fatalError()
+        return """
+        // VM - ADD
+        @SP
+        A=M-1
+        D=M // store the first value in D
+        @SP
+        A=M-2
+        M=M+D
+        @SP
+        M=M-1
+        """
     }
 
     private func generateAssemblyForSubCommand() -> String {
-        fatalError()
+        return """
+        // VM - SUB
+        @SP
+        A=M-1
+        D=M // store the first value in D
+        @SP
+        A=M-2
+        M=M-D
+        @SP
+        M=M-1 // decrement the stack pointer
+        """
+
     }
 
     private func generateAssemblyForEqCommand() -> String {
-        fatalError()
+        return """
+        @SP
+        A=M-1
+        D=M // store first value in D
+        @SP
+        A=M-2
+        D=M-D // D now holds the subtraction of fist - second argument
+        @PUSHTRUE
+        D;JEQ // if D is equal 0, push true to the stack else push false
+        // push false to the stack
+        @SP
+        A=M-2
+        M=0 // push false
+        (PUSHTRUE)
+            @SP
+            A=M-2
+            M=-1 // push true
+        @SP
+        M=M-1 // decrement the stack pointer
+        """
     }
 
     private func generateAssemblyForLtCommand() -> String {
-        fatalError()
+        return """
+        @SP
+        A=M-1
+        D=M // store first value in D
+        @SP
+        A=M-2
+        D=M-D // D now holds the subtraction of fist - second argument
+        @PUSHTRUE
+        D;JLT // if D is less than 0, push true to the stack else push false
+        // push false to the stack
+        @SP
+        A=M-2
+        M=0 // push false
+        (PUSHTRUE)
+            @SP
+            A=M-2
+            M=-1 // push true
+        @SP
+        M=M-1 // decrement the stack pointer
+        """
     }
 
     private func generateAssemblyForGtCommand() -> String {
-        fatalError()
+        return """
+        @SP
+        A=M-1
+        D=M // store first value in D
+        @SP
+        A=M-2
+        D=M-D // D now holds the subtraction of fist - second argument
+        @PUSHTRUE
+        D;JGT // if D is greater than 0, push true to the stack else push false
+        // push false to the stack
+        @SP
+        A=M-2
+        M=0 // push false
+        (PUSHTRUE)
+            @SP
+            A=M-2
+            M=-1 // push true
+        @SP
+        M=M-1 // decrement the stack pointer
+        """
     }
 
     private func generateAssemblyForAndCommand() -> String {
-        fatalError()
+        return """
+        // VM - AND
+        @SP
+        A=M-1
+        D=M // store the first value in D
+        @SP
+        A=M-2
+        M=D&M
+        @SP
+        M=M-1 // decrement the stack pointer
+        """
     }
 
     private func generateAssemblyForOrCommand() -> String {
-        fatalError()
+        return """
+        // VM - OR
+        @SP
+        A=M-1
+        D=M // store the first value in D
+        @SP
+        A=M-2
+        M=D|M
+        @SP
+        M=M-1 // decrement the stack pointer
+        """
     }
 
     private func generateAssemblyForNotCommand() -> String {
-        fatalError()
+        return """
+        // VM - NOT
+        @SP // points to the stack pointer
+        A=M-1 // point to last stack memory location
+        M=!M
+        """
     }
 }
