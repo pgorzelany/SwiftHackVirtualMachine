@@ -50,10 +50,32 @@ class CodeGenerator {
     }
 
     private func generateAssemblyForPushCommand(segment: MemorySegment, index: Int16) -> String {
-        fatalError()
+        return """
+        // VM - Push \(segment.rawValue) \(index)
+        \(getMemorySegmentAddress(for: segment, index: index))
+        D=M // store the value of the memory location in D
+        @SP
+        A=M
+        M=D // store the value in the memory segment on top of the stack
+        @SP
+        M=M+1 // increment the stack pointer
+        """
     }
 
     private func generateAssemblyForPopCommand(segment: MemorySegment, index: Int16) -> String {
+        return """
+        // VM - Pop \(segment.rawValue) \(index)
+        @SP
+        A=M-1
+        D=M // store the value on top of stack in D
+        \(getMemorySegmentAddress(for: segment, index: index))
+        M=D // store the top stack value in the specified memory segment
+        @SP
+        M=M-1 // decrement the stack pointer
+        """
+    }
+
+    private func getMemorySegmentAddress(for segment: MemorySegment, index: Int16) -> String {
         fatalError()
     }
 
