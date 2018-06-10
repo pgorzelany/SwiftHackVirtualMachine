@@ -76,7 +76,29 @@ class CodeGenerator {
     }
 
     private func getMemorySegmentAddress(for segment: MemorySegment, index: Int16) -> String {
-        fatalError()
+        switch segment {
+        case .argument:
+            break
+        case .local:
+            return """
+            @LCL
+            A=M+\(index)
+            """
+        case .static:
+            break
+        case .constant:
+            break
+        case .this:
+            break
+        case .that:
+            break
+        case .pointer:
+            break
+        case .test:
+            break
+        }
+
+        return "lol"
     }
 
     private func generateAssemblyForNegCommand() -> String {
