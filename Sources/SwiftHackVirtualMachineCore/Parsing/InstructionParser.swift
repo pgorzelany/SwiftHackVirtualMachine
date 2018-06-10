@@ -21,33 +21,37 @@ class InstructionParser {
             throw VirtualMachineError(line: line)
         }
 
+        let commandType: CommandType
+
         switch rawCommand {
         case "pop", "push":
             guard components.count == 3, let segment = MemorySegment(rawValue: components[1]), let index = Int16(components[2]) else {
                 throw VirtualMachineError(line: line, description: "The pop command does not contain a valid memory segment and index")
             }
 
-            return rawCommand == "pop" ? .pop(segment: segment, index: index) : .push(segment: segment, index: index)
+            commandType = rawCommand == "pop" ? .pop(segment: segment, index: index) : .push(segment: segment, index: index)
         case "neg":
-            return .neg
+            commandType = .neg
         case "add":
-            return .add
+            commandType = .add
         case "sub":
-            return .sub
+            commandType = .sub
         case "eq":
-            return .eq
+            commandType = .eq
         case "qt":
-            return .qt
+            commandType = .qt
         case "lt":
-            return .lt
+            commandType = .lt
         case "and":
-            return .and
+            commandType = .and
         case "or":
-            return .or
+            commandType = .or
         case "not":
-            return .not
+            commandType = .not
         default:
             throw VirtualMachineError(line: line)
         }
+
+        return Command(type: commandType, line: line)
     }
 }

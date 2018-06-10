@@ -22,11 +22,12 @@
 
 /* Begin PBXBuildFile section */
 		5518FA4D20C073B0001F4D72 /* SourceCodeExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5518FA4C20C073B0001F4D72 /* SourceCodeExtractor.swift */; };
+		55F5669C20CDA26100CA04F1 /* Command.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F5669B20CDA26100CA04F1 /* Command.swift */; };
 		C9223F1220C82DF30029E9F2 /* VirtualMachineError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9223F1120C82DF30029E9F2 /* VirtualMachineError.swift */; };
 		OBJ_35 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* main.swift */; };
 		OBJ_37 /* SwiftHackVirtualMachineCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "SwiftHackVirtualMachine::SwiftHackVirtualMachineCore::Product" /* SwiftHackVirtualMachineCore.framework */; };
 		OBJ_44 /* CodeGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* CodeGenerator.swift */; };
-		OBJ_46 /* Command.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_16 /* Command.swift */; };
+		OBJ_46 /* CommandType.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_16 /* CommandType.swift */; };
 		OBJ_47 /* MemorySegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_17 /* MemorySegment.swift */; };
 		OBJ_48 /* InstructionParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_18 /* InstructionParser.swift */; };
 		OBJ_49 /* SourceCodeLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_19 /* SourceCodeLine.swift */; };
@@ -55,9 +56,10 @@
 
 /* Begin PBXFileReference section */
 		5518FA4C20C073B0001F4D72 /* SourceCodeExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceCodeExtractor.swift; sourceTree = "<group>"; };
+		55F5669B20CDA26100CA04F1 /* Command.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Command.swift; sourceTree = "<group>"; };
 		C9223F1120C82DF30029E9F2 /* VirtualMachineError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualMachineError.swift; sourceTree = "<group>"; };
 		OBJ_12 /* CodeGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeGenerator.swift; sourceTree = "<group>"; };
-		OBJ_16 /* Command.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Command.swift; sourceTree = "<group>"; };
+		OBJ_16 /* CommandType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandType.swift; sourceTree = "<group>"; };
 		OBJ_17 /* MemorySegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemorySegment.swift; sourceTree = "<group>"; };
 		OBJ_18 /* InstructionParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionParser.swift; sourceTree = "<group>"; };
 		OBJ_19 /* SourceCodeLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceCodeLine.swift; sourceTree = "<group>"; };
@@ -130,7 +132,8 @@
 		OBJ_15 /* Commands */ = {
 			isa = PBXGroup;
 			children = (
-				OBJ_16 /* Command.swift */,
+				55F5669B20CDA26100CA04F1 /* Command.swift */,
+				OBJ_16 /* CommandType.swift */,
 				OBJ_17 /* MemorySegment.swift */,
 			);
 			path = Commands;
@@ -311,7 +314,8 @@
 			files = (
 				OBJ_44 /* CodeGenerator.swift in Sources */,
 				5518FA4D20C073B0001F4D72 /* SourceCodeExtractor.swift in Sources */,
-				OBJ_46 /* Command.swift in Sources */,
+				OBJ_46 /* CommandType.swift in Sources */,
+				55F5669C20CDA26100CA04F1 /* Command.swift in Sources */,
 				OBJ_47 /* MemorySegment.swift in Sources */,
 				OBJ_48 /* InstructionParser.swift in Sources */,
 				OBJ_49 /* SourceCodeLine.swift in Sources */,

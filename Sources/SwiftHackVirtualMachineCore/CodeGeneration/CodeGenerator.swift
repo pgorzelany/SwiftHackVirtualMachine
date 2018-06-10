@@ -21,7 +21,7 @@ class CodeGenerator {
     }
 
     func generateAssembly(for command: Command) throws -> String {
-        switch command {
+        switch command.type {
         case .push(let segment, let index):
             return generateAssemblyForPushCommand(segment: segment, index: index)
         case .pop(let segment, let index):
