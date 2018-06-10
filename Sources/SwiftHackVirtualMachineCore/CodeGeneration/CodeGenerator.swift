@@ -125,18 +125,25 @@ class CodeGenerator {
         @SP
         A=M-2
         D=M-D // D now holds the subtraction of fist - second argument
-        @PUSHTRUE
+        @PUSH_TRUE
         D;JEQ // if D is equal 0, push true to the stack else push false
-        // push false to the stack
-        @SP
-        A=M-2
-        M=0 // push false
-        (PUSHTRUE)
+        @PUSH_FALSE
+        0;JMP // otherwise push false
+        (PUSH_TRUE)
             @SP
             A=M-2
             M=-1 // push true
-        @SP
-        M=M-1 // decrement the stack pointer
+            @DECREMENT_STACK_POINTER
+            0;JMP
+        (PUSH_FALSE)
+            @SP
+            A=M-2
+            M=0 // push false
+            @DECREMENT_STACK_POINTER
+            0;JMP
+        (DECREMENT_STACK_POINTER)
+            @SP
+            M=M-1 // decrement the stack pointer
         """
     }
 
@@ -150,16 +157,23 @@ class CodeGenerator {
         D=M-D // D now holds the subtraction of fist - second argument
         @PUSHTRUE
         D;JLT // if D is less than 0, push true to the stack else push false
-        // push false to the stack
-        @SP
-        A=M-2
-        M=0 // push false
-        (PUSHTRUE)
+        @PUSH_FALSE
+        0;JMP // otherwise push false
+        (PUSH_TRUE)
             @SP
             A=M-2
             M=-1 // push true
-        @SP
-        M=M-1 // decrement the stack pointer
+            @DECREMENT_STACK_POINTER
+            0;JMP
+        (PUSH_FALSE)
+            @SP
+            A=M-2
+            M=0 // push false
+            @DECREMENT_STACK_POINTER
+            0;JMP
+        (DECREMENT_STACK_POINTER)
+            @SP
+            M=M-1 // decrement the stack pointer
         """
     }
 
@@ -173,16 +187,23 @@ class CodeGenerator {
         D=M-D // D now holds the subtraction of fist - second argument
         @PUSHTRUE
         D;JGT // if D is greater than 0, push true to the stack else push false
-        // push false to the stack
-        @SP
-        A=M-2
-        M=0 // push false
-        (PUSHTRUE)
+        @PUSH_FALSE
+        0;JMP // otherwise push false
+        (PUSH_TRUE)
             @SP
             A=M-2
             M=-1 // push true
-        @SP
-        M=M-1 // decrement the stack pointer
+            @DECREMENT_STACK_POINTER
+            0;JMP
+        (PUSH_FALSE)
+            @SP
+            A=M-2
+            M=0 // push false
+            @DECREMENT_STACK_POINTER
+            0;JMP
+        (DECREMENT_STACK_POINTER)
+            @SP
+            M=M-1 // decrement the stack pointer
         """
     }
 
