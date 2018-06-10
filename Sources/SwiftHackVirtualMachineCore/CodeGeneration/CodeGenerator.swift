@@ -23,9 +23,9 @@ class CodeGenerator {
     func generateAssembly(for command: Command) throws -> String {
         switch command.type {
         case .push(let segment, let index):
-            return generateAssemblyForPushCommand(segment: segment, index: index, fileName: command.line.sourceFileName)
+            return try generateAssemblyForPushCommand(segment: segment, index: index, fileName: command.line.sourceFileName)
         case .pop(let segment, let index):
-            return generateAssemblyForPopCommand(segment: segment, index: index, fileName: command.line.sourceFileName)
+            return try generateAssemblyForPopCommand(segment: segment, index: index, fileName: command.line.sourceFileName)
         case .neg:
             return generateAssemblyForNegCommand()
         case .add:
@@ -47,10 +47,10 @@ class CodeGenerator {
         }
     }
 
-    private func generateAssemblyForPushCommand(segment: MemorySegment, index: Int16, fileName: String) -> String {
+    private func generateAssemblyForPushCommand(segment: MemorySegment, index: Int16, fileName: String) throws -> String {
         return """
         // VM - Push \(segment) \(index)
-        \(generateAssemblyToStoreValueIntoDRegister(segment: segment, index: index, fileName: fileName))
+        \(try generateAssemblyToStoreValueIntoDRegister(segment: segment, index: index, fileName: fileName))
         @SP
         A=M
         M=D // store the value in the memory segment on top of the stack
@@ -59,13 +59,13 @@ class CodeGenerator {
         """
     }
 
-    private func generateAssemblyForPopCommand(segment: MemorySegment, index: Int16, fileName: String) -> String {
+    private func generateAssemblyForPopCommand(segment: MemorySegment, index: Int16, fileName: String) throws -> String {
         return """
         // VM - Pop \(segment) \(index)
         @SP
         A=M-1
         D=M // store the value on top of stack in D
-        \(generateAssemblyToStoreDRegisterValueIn(segment: segment, index: index, fileName: fileName))
+        \(try generateAssemblyToStoreDRegisterValueIn(segment: segment, index: index, fileName: fileName))
         @SP
         M=M-1 // decrement the stack pointer
         """
@@ -73,14 +73,130 @@ class CodeGenerator {
 
     /// Generates assembly that stores the value in the D register into the specified memory segment and index.
     // Used in the VM POP command
-    private func generateAssemblyToStoreDRegisterValueIn(segment: MemorySegment, index: Int16, fileName: String) -> String {
-        fatalError()
+    private func generateAssemblyToStoreDRegisterValueIn(segment: MemorySegment, index: Int16, fileName: String) throws -> String {
+        switch segment {
+        case .argument:
+            return """
+            @ARG
+            A=M+\(index)
+            M=D
+            """
+        case .local:
+            return """
+            @LCL
+            A=M+\(index)
+            M=D
+            """
+        case .static:
+            return """
+            @\(fileName).\(index)
+            A=M
+            M=D
+            """
+        case .constant:
+            return """
+            @\(index)
+            M=D
+            """
+        case .this:
+            return """
+            @THIS
+            A=M+\(index)
+            M=D
+            """
+        case .that:
+            return """
+            @THAT
+            A=M+\(index)
+            M=D
+            """
+        case .pointer:
+            let address: String
+            switch index {
+            case 0:
+                address = "THIS"
+            case 1:
+                address = "THAT"
+            default:
+                throw VirtualMachineError(message: "Invalid pointer index: \(index)")
+            }
+            return """
+            @\(address)
+            A=M
+            M=D
+            """
+        case .temp:
+            let address = 5 + index
+            return """
+            @\(address)
+            A=M
+            M=D
+            """
+        }
     }
 
     /// Generates assembly that will get the value at the specified memory segment and index and store it into the D register
     /// Used in the VM PUSH command
-    private func generateAssemblyToStoreValueIntoDRegister(segment: MemorySegment, index: Int16, fileName: String) -> String {
-        fatalError()
+    private func generateAssemblyToStoreValueIntoDRegister(segment: MemorySegment, index: Int16, fileName: String) throws -> String {
+        switch segment {
+        case .argument:
+            return """
+            @ARG
+            A=M+\(index)
+            D=M
+            """
+        case .local:
+            return """
+            @LCL
+            A=M+\(index)
+            D=M
+            """
+        case .static:
+            return """
+            @\(fileName).\(index)
+            A=M
+            D=M
+            """
+        case .constant:
+            return """
+            @\(index)
+            D=A
+            """
+        case .this:
+            return """
+            @THIS
+            A=M+\(index)
+            D=M
+            """
+        case .that:
+            return """
+            @THAT
+            A=M+\(index)
+            D=M
+            """
+        case .pointer:
+            let address: String
+            switch index {
+            case 0:
+                address = "THIS"
+            case 1:
+                address = "THAT"
+            default:
+                throw VirtualMachineError(message: "Invalid pointer index: \(index)")
+            }
+            return """
+            @\(address)
+            A=M
+            D=M
+            """
+        case .temp:
+            let address = 5 + index
+            return """
+            @\(address)
+            A=M
+            D=M
+            """
+        }
     }
 
     private func generateAssemblyForNegCommand() -> String {
