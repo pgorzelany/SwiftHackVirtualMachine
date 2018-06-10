@@ -240,6 +240,9 @@ class CodeGenerator {
     }
 
     private func generateAssemblyForEqCommand() -> String {
+        let pushTrueLabel = "push_true_" + UUID().uuidString
+        let pushFalseLabel = "push_false_" + UUID().uuidString
+        let decrementStackPointerLabel = "decrement_stack_pointer_" + UUID().uuidString
         return """
         // VM - EQ
         @SP
@@ -249,31 +252,34 @@ class CodeGenerator {
         A=M-1
         A=A-1
         D=M-D // D now holds the subtraction of fist - second argument
-        @PUSH_TRUE
+        @\(pushTrueLabel)
         D;JEQ // if D is equal 0, push true to the stack else push false
-        @PUSH_FALSE
+        @\(pushFalseLabel)
         0;JMP // otherwise push false
-        (PUSH_TRUE)
+        (\(pushTrueLabel))
             @SP
             A=M-1
             A=A-1
             M=-1 // push true
-            @DECREMENT_STACK_POINTER
+            @\(decrementStackPointerLabel)
             0;JMP
-        (PUSH_FALSE)
+        (\(pushFalseLabel))
             @SP
             A=M-1
             A=A-1
             M=0 // push false
-            @DECREMENT_STACK_POINTER
+            @\(decrementStackPointerLabel)
             0;JMP
-        (DECREMENT_STACK_POINTER)
+        (\(decrementStackPointerLabel))
             @SP
             M=M-1 // decrement the stack pointer
         """
     }
 
     private func generateAssemblyForLtCommand() -> String {
+        let pushTrueLabel = "push_true_" + UUID().uuidString
+        let pushFalseLabel = "push_false_" + UUID().uuidString
+        let decrementStackPointerLabel = "decrement_stack_pointer_" + UUID().uuidString
         return """
         // VM - LT
         @SP
@@ -283,31 +289,34 @@ class CodeGenerator {
         A=M-1
         A=A-1
         D=M-D // D now holds the subtraction of fist - second argument
-        @PUSHTRUE
+        @\(pushTrueLabel)
         D;JLT // if D is less than 0, push true to the stack else push false
-        @PUSH_FALSE
+        @\(pushFalseLabel)
         0;JMP // otherwise push false
-        (PUSH_TRUE)
+        (\(pushTrueLabel))
             @SP
             A=M-1
             A=A-1
             M=-1 // push true
-            @DECREMENT_STACK_POINTER
+            @\(decrementStackPointerLabel)
             0;JMP
-        (PUSH_FALSE)
+        (\(pushFalseLabel))
             @SP
             A=M-1
             A=A-1
             M=0 // push false
-            @DECREMENT_STACK_POINTER
+            @\(decrementStackPointerLabel)
             0;JMP
-        (DECREMENT_STACK_POINTER)
+        (\(decrementStackPointerLabel))
             @SP
             M=M-1 // decrement the stack pointer
         """
     }
 
     private func generateAssemblyForGtCommand() -> String {
+        let pushTrueLabel = "push_true_" + UUID().uuidString
+        let pushFalseLabel = "push_false_" + UUID().uuidString
+        let decrementStackPointerLabel = "decrement_stack_pointer_" + UUID().uuidString
         return """
         // VM - GT
         @SP
@@ -317,25 +326,25 @@ class CodeGenerator {
         A=M-1
         A=A-1
         D=M-D // D now holds the subtraction of fist - second argument
-        @PUSHTRUE
+        @\(pushTrueLabel)
         D;JGT // if D is greater than 0, push true to the stack else push false
-        @PUSH_FALSE
+        @\(pushFalseLabel)
         0;JMP // otherwise push false
-        (PUSH_TRUE)
+        (\(pushTrueLabel))
             @SP
             A=M-1
             A=A-1
             M=-1 // push true
-            @DECREMENT_STACK_POINTER
+            @\(decrementStackPointerLabel)
             0;JMP
-        (PUSH_FALSE)
+        (\(pushFalseLabel))
             @SP
             A=M-1
             A=A-1
             M=0 // push false
-            @DECREMENT_STACK_POINTER
+            @\(decrementStackPointerLabel)
             0;JMP
-        (DECREMENT_STACK_POINTER)
+        (\(decrementStackPointerLabel))
             @SP
             M=M-1 // decrement the stack pointer
         """
