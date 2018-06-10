@@ -22,7 +22,7 @@ public class VirtualMachine {
         let sourceCodeLines = try sourceCodeExtractor.getSourceCodeLines(at: currentDirectoryUrl)
         let strippedSourceCodeLines = stripper.strip(lines: sourceCodeLines)
         let commands = try parser.parse(source: strippedSourceCodeLines)
-//        try codeGenerator.createAssemblyFile(for: commands, at: currentDirectoryUrl)
+        try codeGenerator.createAssemblyFile(for: commands, at: currentDirectoryUrl)
         print("Created asm file")
     }
 }

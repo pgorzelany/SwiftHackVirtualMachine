@@ -23,7 +23,10 @@ public class CommentAndWhitespaceStripper {
     private func stripWhitespace(from lines: [SourceCodeLine]) -> [SourceCodeLine] {
         return lines.compactMap { (line) -> SourceCodeLine? in
             var lineCopy = line
-            lineCopy.contents = lineCopy.contents.components(separatedBy: .whitespacesAndNewlines).joined(separator: " ")
+            lineCopy.contents = lineCopy.contents
+                .components(separatedBy: .whitespacesAndNewlines)
+                .joined(separator: " ")
+                .trimmingCharacters(in: .whitespacesAndNewlines)
             guard !lineCopy.contents.isEmpty else {
                 return nil
             }

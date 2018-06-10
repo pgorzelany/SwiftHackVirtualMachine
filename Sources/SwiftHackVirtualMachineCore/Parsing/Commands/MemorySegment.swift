@@ -15,5 +15,5 @@ public enum MemorySegment: String {
     case this
     case that
     case pointer
-    case test
+    case temp
 }

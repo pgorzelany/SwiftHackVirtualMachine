@@ -21,8 +21,6 @@ class CodeGenerator {
     }
 
     func generateAssembly(for command: Command) throws -> String {
-        #warning("implement this")
-
         switch command {
         case .push(let segment, let index):
             return generateAssemblyForPushCommand(segment: segment, index: index)
@@ -51,7 +49,7 @@ class CodeGenerator {
 
     private func generateAssemblyForPushCommand(segment: MemorySegment, index: Int16) -> String {
         return """
-        // VM - Push \(segment.rawValue) \(index)
+        // VM - Push \(segment) \(index)
         \(getMemorySegmentAddress(for: segment, index: index))
         D=M // store the value of the memory location in D
         @SP
@@ -64,7 +62,7 @@ class CodeGenerator {
 
     private func generateAssemblyForPopCommand(segment: MemorySegment, index: Int16) -> String {
         return """
-        // VM - Pop \(segment.rawValue) \(index)
+        // VM - Pop \(segment) \(index)
         @SP
         A=M-1
         D=M // store the value on top of stack in D
@@ -94,7 +92,7 @@ class CodeGenerator {
             break
         case .pointer:
             break
-        case .test:
+        case .temp:
             break
         }
 
