@@ -34,7 +34,7 @@ class CodeGenerator {
             return generateAssemblyForSubCommand()
         case .eq:
             return generateAssemblyForEqCommand()
-        case .qt:
+        case .gt:
             return generateAssemblyForGtCommand()
         case .lt:
             return generateAssemblyForLtCommand()
@@ -215,7 +215,8 @@ class CodeGenerator {
         A=M-1
         D=M // store the first value in D
         @SP
-        A=M-2
+        A=M-1
+        A=A-1
         M=M+D
         @SP
         M=M-1
@@ -229,7 +230,8 @@ class CodeGenerator {
         A=M-1
         D=M // store the first value in D
         @SP
-        A=M-2
+        A=M-1
+        A=A-1
         M=M-D
         @SP
         M=M-1 // decrement the stack pointer
@@ -239,11 +241,13 @@ class CodeGenerator {
 
     private func generateAssemblyForEqCommand() -> String {
         return """
+        // VM - EQ
         @SP
         A=M-1
         D=M // store first value in D
         @SP
-        A=M-2
+        A=M-1
+        A=A-1
         D=M-D // D now holds the subtraction of fist - second argument
         @PUSH_TRUE
         D;JEQ // if D is equal 0, push true to the stack else push false
@@ -251,13 +255,15 @@ class CodeGenerator {
         0;JMP // otherwise push false
         (PUSH_TRUE)
             @SP
-            A=M-2
+            A=M-1
+            A=A-1
             M=-1 // push true
             @DECREMENT_STACK_POINTER
             0;JMP
         (PUSH_FALSE)
             @SP
-            A=M-2
+            A=M-1
+            A=A-1
             M=0 // push false
             @DECREMENT_STACK_POINTER
             0;JMP
@@ -269,11 +275,13 @@ class CodeGenerator {
 
     private func generateAssemblyForLtCommand() -> String {
         return """
+        // VM - LT
         @SP
         A=M-1
         D=M // store first value in D
         @SP
-        A=M-2
+        A=M-1
+        A=A-1
         D=M-D // D now holds the subtraction of fist - second argument
         @PUSHTRUE
         D;JLT // if D is less than 0, push true to the stack else push false
@@ -281,13 +289,15 @@ class CodeGenerator {
         0;JMP // otherwise push false
         (PUSH_TRUE)
             @SP
-            A=M-2
+            A=M-1
+            A=A-1
             M=-1 // push true
             @DECREMENT_STACK_POINTER
             0;JMP
         (PUSH_FALSE)
             @SP
-            A=M-2
+            A=M-1
+            A=A-1
             M=0 // push false
             @DECREMENT_STACK_POINTER
             0;JMP
@@ -299,11 +309,13 @@ class CodeGenerator {
 
     private func generateAssemblyForGtCommand() -> String {
         return """
+        // VM - GT
         @SP
         A=M-1
         D=M // store first value in D
         @SP
-        A=M-2
+        A=M-1
+        A=A-1
         D=M-D // D now holds the subtraction of fist - second argument
         @PUSHTRUE
         D;JGT // if D is greater than 0, push true to the stack else push false
@@ -311,13 +323,15 @@ class CodeGenerator {
         0;JMP // otherwise push false
         (PUSH_TRUE)
             @SP
-            A=M-2
+            A=M-1
+            A=A-1
             M=-1 // push true
             @DECREMENT_STACK_POINTER
             0;JMP
         (PUSH_FALSE)
             @SP
-            A=M-2
+            A=M-1
+            A=A-1
             M=0 // push false
             @DECREMENT_STACK_POINTER
             0;JMP
@@ -334,7 +348,8 @@ class CodeGenerator {
         A=M-1
         D=M // store the first value in D
         @SP
-        A=M-2
+        A=M-1
+        A=A-1
         M=D&M
         @SP
         M=M-1 // decrement the stack pointer
@@ -348,7 +363,8 @@ class CodeGenerator {
         A=M-1
         D=M // store the first value in D
         @SP
-        A=M-2
+        A=M-1
+        A=A-1
         M=D|M
         @SP
         M=M-1 // decrement the stack pointer

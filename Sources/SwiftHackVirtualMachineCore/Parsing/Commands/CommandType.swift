@@ -14,7 +14,7 @@ public enum CommandType {
     case add
     case sub
     case eq
-    case qt
+    case gt
     case lt
     case and
     case or
