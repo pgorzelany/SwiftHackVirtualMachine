@@ -121,7 +121,6 @@ class CodeGenerator {
             }
             return """
             @\(address)
-            A=M
             M=D
             """
         case .temp:
@@ -183,7 +182,6 @@ class CodeGenerator {
             }
             return """
             @\(address)
-            A=M
             D=M
             """
         case .temp:
