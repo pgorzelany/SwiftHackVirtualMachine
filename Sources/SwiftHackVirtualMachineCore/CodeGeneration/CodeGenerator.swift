@@ -128,7 +128,6 @@ class CodeGenerator {
             let address = 5 + index
             return """
             @\(address)
-            A=M
             M=D
             """
         }
@@ -191,7 +190,6 @@ class CodeGenerator {
             let address = 5 + index
             return """
             @\(address)
-            A=M
             D=M
             """
         }
