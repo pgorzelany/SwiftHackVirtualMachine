@@ -78,19 +78,18 @@ class CodeGenerator {
         case .argument:
             return """
             @ARG
-            A=M+\(index)
+            \(generateAssemblyToGetAddress(for: index))
             M=D
             """
         case .local:
             return """
             @LCL
-            A=M+\(index)
+            \(generateAssemblyToGetAddress(for: index))
             M=D
             """
         case .static:
             return """
             @\(fileName).\(index)
-            A=M
             M=D
             """
         case .constant:
@@ -101,13 +100,13 @@ class CodeGenerator {
         case .this:
             return """
             @THIS
-            A=M+\(index)
+            \(generateAssemblyToGetAddress(for: index))
             M=D
             """
         case .that:
             return """
             @THAT
-            A=M+\(index)
+            \(generateAssemblyToGetAddress(for: index))
             M=D
             """
         case .pointer:
@@ -142,19 +141,18 @@ class CodeGenerator {
         case .argument:
             return """
             @ARG
-            A=M+\(index)
+            \(generateAssemblyToGetAddress(for: index))
             D=M
             """
         case .local:
             return """
             @LCL
-            A=M+\(index)
+            \(generateAssemblyToGetAddress(for: index))
             D=M
             """
         case .static:
             return """
             @\(fileName).\(index)
-            A=M
             D=M
             """
         case .constant:
@@ -165,13 +163,13 @@ class CodeGenerator {
         case .this:
             return """
             @THIS
-            A=M+\(index)
+            \(generateAssemblyToGetAddress(for: index))
             D=M
             """
         case .that:
             return """
             @THAT
-            A=M+\(index)
+            \(generateAssemblyToGetAddress(for: index))
             D=M
             """
         case .pointer:
@@ -197,6 +195,17 @@ class CodeGenerator {
             D=M
             """
         }
+    }
+
+    /// Generates assembly to store the specified memory address in the A register
+    /// A prerequisite is that the A register already holds the desired base memory segment address
+    private func generateAssemblyToGetAddress(for index: Int16) -> String {
+        var assembly = "A=M" // start at the speicifed memory segment base address
+        // We can only increment the memory by 1 so we need to unfold the index
+        for _ in (0..<index) {
+            assembly += "\nA=A+1"
+        }
+        return assembly
     }
 
     private func generateAssemblyForNegCommand() -> String {
