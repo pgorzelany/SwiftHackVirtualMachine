@@ -9,6 +9,8 @@ import Foundation
 
 class InstructionParser {
 
+    var currentFunctionScope: String?
+
     func parse(source: [SourceCodeLine]) throws -> [Command] {
         return try source.map(extractCommand)
     }
@@ -48,6 +50,24 @@ class InstructionParser {
             commandType = .or
         case "not":
             commandType = .not
+        case "label":
+            guard components.count >= 2 else {
+                throw VirtualMachineError(line: line, description: "Missing label name")
+            }
+            let name = components[1]
+            commandType = .label(name: name)
+        case "goto":
+            guard components.count >= 2 else {
+                throw VirtualMachineError(line: line, description: "Missing label name")
+            }
+            let label = components[1]
+            commandType = .goto(label: label)
+        case "if-goto":
+            guard components.count >= 2 else {
+                throw VirtualMachineError(line: line, description: "Missing label name")
+            }
+            let label = components[1]
+            commandType = .ifgoto(label: label)
         default:
             throw VirtualMachineError(line: line)
         }

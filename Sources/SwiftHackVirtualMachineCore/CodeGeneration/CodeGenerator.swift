@@ -44,6 +44,12 @@ class CodeGenerator {
             return generateAssemblyForOrCommand()
         case .not:
             return generateAssemblyForNotCommand()
+        case .label(let name):
+            return generateAssemblyForLabelCommand(name: name)
+        case .goto(let label):
+            return generateAssemblyForGotoCommand(label: label)
+        case .ifgoto(let label):
+            return generateAssemblyForIfGotoCommand(label: label)
         }
     }
 
@@ -391,6 +397,34 @@ class CodeGenerator {
         @SP // points to the stack pointer
         A=M-1 // point to last stack memory location
         M=!M
+        """
+    }
+
+    private func generateAssemblyForLabelCommand(name: String) -> String {
+        return """
+        // VM - LABEL
+        (\(name))
+        """
+    }
+
+    private func generateAssemblyForGotoCommand(label: String) -> String {
+        return """
+        // VM - GOTO
+        @\(label)
+        0;JMP
+        """
+    }
+
+    private func generateAssemblyForIfGotoCommand(label: String) -> String {
+        return """
+        // VM - IFGOTO
+        @SP
+        A=M-1
+        D=M
+        @SP
+        M=M-1
+        @\(label)
+        D;JNE
         """
     }
 }

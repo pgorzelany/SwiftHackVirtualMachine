@@ -19,4 +19,7 @@ public enum CommandType {
     case and
     case or
     case not
+    case label(name: String)
+    case goto(label: String)
+    case ifgoto(label: String)
 }
