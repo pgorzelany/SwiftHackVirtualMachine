@@ -467,16 +467,16 @@ class CodeGenerator {
         let returnAddress = UUID().uuidString
         return """
         // VM - Call Subroutine
-        \(generateAssemblyToPushAddressOnStack(address: returnAddress))
-        \(generateAssemblyToPushAddressOnStack(address: "LCL"))
-        \(generateAssemblyToPushAddressOnStack(address: "ARG"))
-        \(generateAssemblyToPushAddressOnStack(address: "THIS"))
-        \(generateAssemblyToPushAddressOnStack(address: "THAT"))
+        \(generateAssemblyToPushPointerAddressOnStack(address: returnAddress))
+        \(generateAssemblyToPushPointerAddressOnStack(address: "LCL"))
+        \(generateAssemblyToPushPointerAddressOnStack(address: "ARG"))
+        \(generateAssemblyToPushPointerAddressOnStack(address: "THIS"))
+        \(generateAssemblyToPushPointerAddressOnStack(address: "THAT"))
         \(generateAssemblyToRepositionArgSegment(argumentCount: argumentCount))
         @SP
         D=M // Store SP address in D
         @LCL
-        A=D // LCL now points to top of stack
+        M=D // LCL now points to top of stack
         @\(functionName)
         0;JMP // goto function
         (\(returnAddress))
@@ -484,6 +484,18 @@ class CodeGenerator {
     }
 
     private func generateAssemblyToPushAddressOnStack(address: String) -> String {
+        return """
+        @\(address)
+        D=A // Store address in D
+        @SP
+        A=M
+        M=D // Push address on the stack
+        @SP
+        M=M+1 // Increment the stack pointer
+        """
+    }
+
+    private func generateAssemblyToPushPointerAddressOnStack(address: String) -> String {
         return """
         @\(address)
         D=M // Store address in D
@@ -496,7 +508,10 @@ class CodeGenerator {
     }
 
     private func generateAssemblyToRepositionArgSegment(argumentCount: UInt) -> String {
-        var assembly = "@SP\n"
+        var assembly = """
+                    @SP
+                    A=M
+                    """
         for _ in 0..<(argumentCount+5) {
             assembly += "A=A-1\n"
         }
@@ -510,6 +525,37 @@ class CodeGenerator {
     }
 
     private func generateAssemblyForReturnCommand() -> String {
-        fatalError()
+        return """
+        // VM - RETURN
+        @SP
+        A=M-1
+        D=M
+        @ARG
+        A=M
+        M=D // store the result of the subroutine call at the top of the caller stack
+        @ARG
+        D=A+1
+        @SP
+        M=D // reposition the stack pointer for the caller
+        
+        @LCL
+        D=M
+
+        @THAT
+        D=D-1
+        M=D
+        @THIS
+        D=D-1
+        M=D
+        @ARG
+        D=D-1
+        M=D
+        @LCL
+        D=D-1
+        M=D
+        D=D-1
+        A=D // This is the return address
+        0;JMP
+        """
     }
 }
