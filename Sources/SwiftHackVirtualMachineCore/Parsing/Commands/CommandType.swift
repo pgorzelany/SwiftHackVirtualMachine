@@ -22,4 +22,7 @@ public enum CommandType {
     case label(name: String)
     case goto(label: String)
     case ifgoto(label: String)
+    case function(name: String, argumentCount: UInt)
+    case call(functionName: String, argumentCount: UInt)
+    case `return`
 }

@@ -9,7 +9,7 @@ import Foundation
 
 class InstructionParser {
 
-    var currentFunctionScope: String?
+    private var functionScopes = [String]()
 
     func parse(source: [SourceCodeLine]) throws -> [Command] {
         return try source.map(extractCommand)
@@ -54,20 +54,45 @@ class InstructionParser {
             guard components.count >= 2 else {
                 throw VirtualMachineError(line: line, description: "Missing label name")
             }
-            let name = components[1]
+            var name = components[1]
+            if let currentFunctionName = functionScopes.last {
+                name = "\(currentFunctionName)$\(name)"
+            }
             commandType = .label(name: name)
         case "goto":
             guard components.count >= 2 else {
                 throw VirtualMachineError(line: line, description: "Missing label name")
             }
-            let label = components[1]
+            var label = components[1]
+            if let currentFunctionName = functionScopes.last {
+                label = "\(currentFunctionName)$\(label)"
+            }
             commandType = .goto(label: label)
         case "if-goto":
             guard components.count >= 2 else {
                 throw VirtualMachineError(line: line, description: "Missing label name")
             }
-            let label = components[1]
+            var label = components[1]
+            if let currentFunctionName = functionScopes.last {
+                label = "\(currentFunctionName)$\(label)"
+            }
             commandType = .ifgoto(label: label)
+        case "function":
+            guard components.count >= 3, let argumentCount = UInt(components[2]) else {
+                throw VirtualMachineError(line: line, description: "Invalid function declaration")
+            }
+            let name = components[1]
+            commandType = .function(name: name, argumentCount: argumentCount)
+            functionScopes.append(name)
+        case "call":
+            guard components.count >= 3, let argumentCount = UInt(components[2]) else {
+                throw VirtualMachineError(line: line, description: "Missing function name")
+            }
+            let functionName = components[1]
+            commandType = .call(functionName: functionName, argumentCount: argumentCount)
+        case "return":
+            commandType = .return
+            _ = functionScopes.popLast()
         default:
             throw VirtualMachineError(line: line)
         }

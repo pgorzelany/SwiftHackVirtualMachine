@@ -50,6 +50,12 @@ class CodeGenerator {
             return generateAssemblyForGotoCommand(label: label)
         case .ifgoto(let label):
             return generateAssemblyForIfGotoCommand(label: label)
+        case .function(let name, let argumentCount):
+            return generateAssemblyForFunctionCommand(name: name, localVariableCount: argumentCount)
+        case .call(let functionName, let argumentCount):
+            return generateAssemblyForCallCommand(functionName: functionName, argumentCount: argumentCount)
+        case .return:
+            return generateAssemblyForReturnCommand()
         }
     }
 
@@ -426,5 +432,84 @@ class CodeGenerator {
         @\(label)
         D;JNE
         """
+    }
+
+    private func generateAssemblyForFunctionCommand(name: String, localVariableCount: UInt) -> String {
+        return """
+        // VM - Function Declaration
+        (\(name))
+        \(generateAssemblyToAllocateLocalVariables(n: localVariableCount))
+        """
+    }
+
+    private func generateAssemblyToAllocateLocalVariables(n: UInt) -> String {
+        guard n > 0 else {
+            return ""
+        }
+
+        var assembly = """
+        @LCL
+        A=M
+        M=0
+        """
+
+        for _ in 1..<n {
+            assembly += """
+            A=A+1
+            M=0
+            """
+        }
+
+        return assembly
+    }
+
+    private func generateAssemblyForCallCommand(functionName: String, argumentCount: UInt) -> String {
+        let returnAddress = UUID().uuidString
+        return """
+        // VM - Call Subroutine
+        \(generateAssemblyToPushAddressOnStack(address: returnAddress))
+        \(generateAssemblyToPushAddressOnStack(address: "LCL"))
+        \(generateAssemblyToPushAddressOnStack(address: "ARG"))
+        \(generateAssemblyToPushAddressOnStack(address: "THIS"))
+        \(generateAssemblyToPushAddressOnStack(address: "THAT"))
+        \(generateAssemblyToRepositionArgSegment(argumentCount: argumentCount))
+        @SP
+        D=M // Store SP address in D
+        @LCL
+        A=D // LCL now points to top of stack
+        @\(functionName)
+        0;JMP // goto function
+        (\(returnAddress))
+        """
+    }
+
+    private func generateAssemblyToPushAddressOnStack(address: String) -> String {
+        return """
+        @\(address)
+        D=M // Store address in D
+        @SP
+        A=M
+        M=D // Push address on the stack
+        @SP
+        M=M+1 // Increment the stack pointer
+        """
+    }
+
+    private func generateAssemblyToRepositionArgSegment(argumentCount: UInt) -> String {
+        var assembly = "@SP\n"
+        for _ in 0..<(argumentCount+5) {
+            assembly += "A=A-1\n"
+        }
+        assembly += """
+        D=A
+        @ARG
+        M=D // reposition ARG
+        """
+
+        return assembly
+    }
+
+    private func generateAssemblyForReturnCommand() -> String {
+        fatalError()
     }
 }
