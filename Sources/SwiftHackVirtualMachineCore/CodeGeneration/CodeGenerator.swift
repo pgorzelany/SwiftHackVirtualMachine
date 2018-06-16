@@ -513,7 +513,7 @@ class CodeGenerator {
                     A=M
                     """
         for _ in 0..<(argumentCount+5) {
-            assembly += "A=A-1\n"
+            assembly += "\nA=A-1\n"
         }
         assembly += """
         D=A
@@ -540,22 +540,48 @@ class CodeGenerator {
         
         @LCL
         D=M
+        @R15
+        M=D
 
-        @THAT
-        D=D-1
-        M=D
+        @R15
+        A=M-1
+        D=M
         @THIS
-        D=D-1
         M=D
+
+        @R15
+        A=M-1
+        A=A-1
+        D=M
+        @THAT
+        M=D
+
+        @R15
+        A=M-1
+        A=A-1
+        A=A-1
+        D=M
         @ARG
-        D=D-1
         M=D
+
+        @R15
+        A=M-1
+        A=A-1
+        A=A-1
+        A=A-1
+        D=M
         @LCL
-        D=D-1
         M=D
-        D=D-1
-        A=D // This is the return address
-        0;JMP
+
+        @R15
+        A=M-1
+        A=A-1
+        A=A-1
+        A=A-1
+        A=A-1
+        D=M // this is the return address
+        A=D
+        0;JMP // go to the return address
         """
     }
 }
