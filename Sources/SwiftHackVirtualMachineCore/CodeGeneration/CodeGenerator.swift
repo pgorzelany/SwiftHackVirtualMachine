@@ -12,7 +12,7 @@ class CodeGenerator {
     func createAssemblyFile(for commands: [Command], at directoryURL: URL) throws {
         let directoryName = directoryURL.lastPathComponent
         let outputUrl = URL(fileURLWithPath: directoryURL.path).appendingPathComponent("\(directoryName).asm")
-        let assembly = try generateAssembly(for: commands)
+        let assembly = try (generateInitializationAssembly() + generateAssembly(for: commands))
         try assembly.write(to: outputUrl, atomically: true, encoding: .utf8)
     }
 
@@ -582,6 +582,17 @@ class CodeGenerator {
         D=M // this is the return address
         A=D
         0;JMP // go to the return address
+        """
+    }
+
+    private func generateInitializationAssembly() -> String {
+        return """
+        @256
+        D=A
+        @SP
+        M=D
+        @Sys.init
+        0;JMP
         """
     }
 }
