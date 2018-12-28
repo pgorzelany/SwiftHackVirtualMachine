@@ -451,6 +451,7 @@ class CodeGenerator {
         @LCL
         A=M
         M=0
+        \n
         """
 
         for _ in 1..<n {
