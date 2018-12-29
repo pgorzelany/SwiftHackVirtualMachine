@@ -546,14 +546,14 @@ class CodeGenerator {
         @R15
         A=M-1
         D=M
-        @THIS
+        @THAT
         M=D
 
         @R15
         A=M-1
         A=A-1
         D=M
-        @THAT
+        @THIS
         M=D
 
         @R15
