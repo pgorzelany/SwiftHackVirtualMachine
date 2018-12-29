@@ -519,64 +519,65 @@ class CodeGenerator {
     }
 
     private func generateAssemblyForReturnCommand() -> String {
-        return """
-        // VM - RETURN
-        @SP
-        A=M-1
-        D=M
-        @ARG
-        A=M
-        M=D // store the result of the subroutine call at the top of the caller stack
-        @ARG
-        D=M+1
-        @SP
-        M=D // reposition the stack pointer for the caller
+        return [
+        "// return",
+        "@LCL",
+        "D=M",
+        "@R13",
+        "M=D",
 
-        @LCL
-        D=M
-        @R15
-        M=D
+        "@5",
+        "A=D-A",
+        "D=M",
+        "@R14",
+        "M=D",
 
-        @R15
-        A=M-1
-        D=M
-        @THAT
-        M=D
+        "@SP",
+        "A=M-1",
+        "D=M",
+        "@ARG",
+        "A=M",
+        "M=D",
 
-        @R15
-        A=M-1
-        A=A-1
-        D=M
-        @THIS
-        M=D
+        "@ARG",
+        "D=M+1",
+        "@SP",
+        "M=D",
 
-        @R15
-        A=M-1
-        A=A-1
-        A=A-1
-        D=M
-        @ARG
-        M=D
+        "@R13",
+        "A=M-1",
+        "D=M",
+        "@THAT",
+        "M=D",
 
-        @R15
-        A=M-1
-        A=A-1
-        A=A-1
-        A=A-1
-        D=M
-        @LCL
-        M=D
+        "@R13",
+        "A=M-1",
+        "A=A-1",
+        "D=M",
+        "@THIS",
+        "M=D",
 
-        @R15
-        A=M-1
-        A=A-1
-        A=A-1
-        A=A-1
-        A=A-1
-        D=M // this is the return address
-        A=D
-        0;JMP // go to the return address
-        """
+        "@R13",
+        "A=M-1",
+        "A=A-1",
+        "A=A-1",
+        "D=M",
+        "@ARG",
+        "M=D",
+
+        "@R13",
+        "A=M-1",
+        "A=A-1",
+        "A=A-1",
+        "A=A-1",
+        "D=M",
+        "@LCL",
+        "M=D",
+
+        "@R14",
+        "A=M",
+        "0;JMP"
+        ].joined(separator: "\n")
     }
 
     private func generateInitializationAssembly() -> String {
