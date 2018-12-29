@@ -450,14 +450,13 @@ class CodeGenerator {
         var assembly = """
         @LCL
         A=M
-        M=0
-        \n
+        M=0\n
         """
 
         for _ in 1..<n {
             assembly += """
             A=A+1
-            M=0
+            M=0\n
             """
         }
 
@@ -535,10 +534,10 @@ class CodeGenerator {
         A=M
         M=D // store the result of the subroutine call at the top of the caller stack
         @ARG
-        D=A+1
+        D=M+1
         @SP
         M=D // reposition the stack pointer for the caller
-        
+
         @LCL
         D=M
         @R15
@@ -588,6 +587,7 @@ class CodeGenerator {
 
     private func generateInitializationAssembly() -> String {
         return """
+        // VM - INITIALIZATION CODE
         @256
         D=A
         @SP
