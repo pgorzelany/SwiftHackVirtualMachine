@@ -438,6 +438,10 @@ class CodeGenerator {
         return """
         // VM - Function Declaration
         (\(name))
+        @SP
+        D=M // Store stack pointer in D
+        @LCL
+        M=D // LCL now points to top of stack
         \(generateAssemblyToAllocateLocalVariables(n: localVariableCount))
         """
     }
@@ -447,17 +451,10 @@ class CodeGenerator {
             return ""
         }
 
-        var assembly = """
-        @LCL
-        A=M
-        M=0\n
-        """
+        var assembly = ""
 
-        for _ in 1..<n {
-            assembly += """
-            A=A+1
-            M=0\n
-            """
+        for _ in 0..<n {
+            assembly += try! generateAssemblyForPushCommand(segment: .constant, index: 0, fileName: "CONSTANT") + "\n"
         }
 
         return assembly
@@ -468,18 +465,26 @@ class CodeGenerator {
         return """
         // VM - Call Subroutine
         \(generateAssemblyToRepositionArgSegment(argumentCount: argumentCount))
-        \(generateAssemblyToPushPointerAddressOnStack(address: returnAddress))
+        \(generateAssemblyToPushAddressOnStack(address: returnAddress))
         \(generateAssemblyToPushPointerAddressOnStack(address: "LCL"))
         \(generateAssemblyToPushPointerAddressOnStack(address: "ARG"))
         \(generateAssemblyToPushPointerAddressOnStack(address: "THIS"))
         \(generateAssemblyToPushPointerAddressOnStack(address: "THAT"))
-        @SP
-        D=M // Store SP address in D
-        @LCL
-        M=D // LCL now points to top of stack
         @\(functionName)
         0;JMP // goto function
         (\(returnAddress))
+        """
+    }
+
+    private func generateAssemblyToPushAddressOnStack(address: String) -> String {
+        return """
+        @\(address)
+        D=A // Store address in D
+        @SP
+        A=M
+        M=D // Push address on the stack
+        @SP
+        M=M+1 // Increment the stack pointer
         """
     }
 
