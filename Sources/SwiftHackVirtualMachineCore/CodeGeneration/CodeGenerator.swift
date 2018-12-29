@@ -464,12 +464,12 @@ class CodeGenerator {
         let returnAddress = UUID().uuidString
         return """
         // VM - Call Subroutine
-        \(generateAssemblyToRepositionArgSegment(argumentCount: argumentCount))
         \(generateAssemblyToPushAddressOnStack(address: returnAddress))
         \(generateAssemblyToPushPointerAddressOnStack(address: "LCL"))
         \(generateAssemblyToPushPointerAddressOnStack(address: "ARG"))
         \(generateAssemblyToPushPointerAddressOnStack(address: "THIS"))
         \(generateAssemblyToPushPointerAddressOnStack(address: "THAT"))
+        \(generateAssemblyToRepositionArgSegment(argumentCount: argumentCount))
         @\(functionName)
         0;JMP // goto function
         (\(returnAddress))
@@ -506,7 +506,7 @@ class CodeGenerator {
                     @SP
                     A=M\n
                     """
-        for _ in 0..<(argumentCount) {
+        for _ in 0..<(argumentCount + 5) {
             assembly += "\nA=A-1\n"
         }
         assembly += """
