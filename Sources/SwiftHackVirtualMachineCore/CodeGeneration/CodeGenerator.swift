@@ -467,12 +467,12 @@ class CodeGenerator {
         let returnAddress = UUID().uuidString
         return """
         // VM - Call Subroutine
+        \(generateAssemblyToRepositionArgSegment(argumentCount: argumentCount))
         \(generateAssemblyToPushPointerAddressOnStack(address: returnAddress))
         \(generateAssemblyToPushPointerAddressOnStack(address: "LCL"))
         \(generateAssemblyToPushPointerAddressOnStack(address: "ARG"))
         \(generateAssemblyToPushPointerAddressOnStack(address: "THIS"))
         \(generateAssemblyToPushPointerAddressOnStack(address: "THAT"))
-        \(generateAssemblyToRepositionArgSegment(argumentCount: argumentCount))
         @SP
         D=M // Store SP address in D
         @LCL
@@ -480,18 +480,6 @@ class CodeGenerator {
         @\(functionName)
         0;JMP // goto function
         (\(returnAddress))
-        """
-    }
-
-    private func generateAssemblyToPushAddressOnStack(address: String) -> String {
-        return """
-        @\(address)
-        D=A // Store address in D
-        @SP
-        A=M
-        M=D // Push address on the stack
-        @SP
-        M=M+1 // Increment the stack pointer
         """
     }
 
@@ -509,10 +497,11 @@ class CodeGenerator {
 
     private func generateAssemblyToRepositionArgSegment(argumentCount: UInt) -> String {
         var assembly = """
+                    // Reposition the ARG pointer for \(argumentCount) arguments
                     @SP
-                    A=M
+                    A=M\n
                     """
-        for _ in 0..<(argumentCount+5) {
+        for _ in 0..<(argumentCount) {
             assembly += "\nA=A-1\n"
         }
         assembly += """
