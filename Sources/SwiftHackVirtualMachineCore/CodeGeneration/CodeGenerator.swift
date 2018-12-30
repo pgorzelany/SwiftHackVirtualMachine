@@ -587,8 +587,7 @@ class CodeGenerator {
         D=A
         @SP
         M=D
-        @Sys.init
-        0;JMP
+        \(generateAssemblyForCallCommand(functionName: "Sys.init", argumentCount: 0))\n
         """
     }
 }
